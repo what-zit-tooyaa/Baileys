@@ -324,6 +324,9 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 			break
 		}
 	}
+	const handleNewsletterNotification = async(node: BinaryNode, msg: Partial<proto.IWebMessageInfo>) => {
+
+	}
 
 	const processNotification = async(node: BinaryNode) => {
 		const result: Partial<proto.IWebMessageInfo> = { }
@@ -347,6 +350,9 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 			}
 
 			break
+		case 'newsletter':
+			handleNewsletterNotification(child, result)
+		break
 		case 'w:gp2':
 			handleGroupNotification(node.attrs.participant, child, result)
 			break
@@ -798,7 +804,7 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 	}
 
 	const handleBadAck = async({ attrs }: BinaryNode) => {
-		const key: WAMessageKey = { remoteJid: attrs.from, fromMe: true, id: attrs.id }
+		const key: WAMessageKey = { remoteJid: attrs.from, fromMe: true, id: attrs.id, server_id: attrs?.server_id }
 		// current hypothesis is that if pash is sent in the ack
 		// it means -- the message hasn't reached all devices yet
 		// we'll retry sending the message here

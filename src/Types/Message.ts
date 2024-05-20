@@ -13,7 +13,7 @@ export type WAMessage = proto.IWebMessageInfo
 export type WAMessageContent = proto.IMessage
 export type WAContactMessage = proto.Message.IContactMessage
 export type WAContactsArrayMessage = proto.Message.IContactsArrayMessage
-export type WAMessageKey = proto.IMessageKey
+export type WAMessageKey = proto.IMessageKey & {server_id?: (string|undefined)}
 export type WATextMessage = proto.Message.IExtendedTextMessage
 export type WAContextInfo = proto.IContextInfo
 export type WALocationMessage = proto.Message.ILocationMessage
@@ -210,6 +210,7 @@ export type MessageRelayOptions = MinimalRelayOptions & {
     useUserDevicesCache?: boolean
     /** jid list of participants for status@broadcast */
     statusJidList?: string[]
+    newsletter?: boolean
 }
 
 export type MiscMessageGenerationOptions = MinimalRelayOptions & {
@@ -227,6 +228,7 @@ export type MiscMessageGenerationOptions = MinimalRelayOptions & {
     backgroundColor?: string
     /** font type for status */
     font?: number
+    newsletter?: boolean
     /** if it is broadcast */
     broadcast?: boolean
 }
@@ -234,7 +236,7 @@ export type MessageGenerationOptionsFromContent = MiscMessageGenerationOptions &
 	userJid: string
 }
 
-export type WAMediaUploadFunction = (readStream: Readable, opts: { fileEncSha256B64: string, mediaType: MediaType, timeoutMs?: number }) => Promise<{ mediaUrl: string, directPath: string }>
+export type WAMediaUploadFunction = (readStream: Readable, opts: { fileEncSha256B64: string, mediaType: MediaType, timeoutMs?: number, newsletter?: boolean }) => Promise<{ mediaUrl: string, directPath: string, handle?: string }>
 
 export type MediaGenerationOptions = {
 	logger?: Logger
@@ -244,6 +246,8 @@ export type MediaGenerationOptions = {
     mediaCache?: CacheStore
 
     mediaUploadTimeoutMs?: number
+
+    newsletter?: boolean
 
     options?: AxiosRequestConfig
 
